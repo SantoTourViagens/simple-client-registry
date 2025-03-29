@@ -16,6 +16,7 @@ import RelatorioPagina from "./pages/RelatorioPagina";
 import PedidoAcesso from "./pages/PedidoAcesso";
 import LoginPage from "./pages/LoginPage";
 import LogoutPage from "./pages/LogoutPage";
+import GerenciarPassageirosForm from "./pages/forms/GerenciarPassageirosForm";
 
 // Report pages
 import RelatoriosIndex from "./pages/reports/RelatoriosIndex";
@@ -54,6 +55,7 @@ const App = () => (
           <Route path="/form/viagens/editar/:id" element={<ViagensForm />} />
           <Route path="/form/viagens/excluir" element={<ViagensForm />} />
           <Route path="/form/passageiros" element={<PassageirosForm />} />
+          <Route path="/form/gerenciar-passageiros" element={<GerenciarPassageirosForm />} />
           <Route path="/form/adiantamentos" element={<AdiantamentosForm />} />
           
           {/* Reports routes */}

@@ -1,8 +1,9 @@
+
 // pages\Dashboard.tsx
 import Layout from "@/components/layout/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { FileText, PieChart, Users, Plane, LogIn, LogOut, UserPlus } from "lucide-react"
+import { FileText, PieChart, Users, Plane, LogIn, LogOut, UserPlus, Settings } from "lucide-react"
 
 const Dashboard = () => {
   return (
@@ -42,6 +43,13 @@ const Dashboard = () => {
             description="Cadastro e gestão de passageiros"
             icon={<FileText className="h-8 w-8 text-navy" />}
             link="/form/passageiros"
+          />
+          
+          <DashboardCard
+            title="Gerenciar Passageiros"
+            description="Gerenciar passageiros por viagem"
+            icon={<Settings className="h-8 w-8 text-navy" />}
+            link="/form/gerenciar-passageiros"
           />
           
           <DashboardCard

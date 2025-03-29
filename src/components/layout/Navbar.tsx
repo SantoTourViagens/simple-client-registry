@@ -8,7 +8,8 @@ import {
   LogOut, 
   UserPlus,
   Users,
-  Plane 
+  Plane,
+  Settings
 } from "lucide-react";
 
 const Navbar = () => {
@@ -25,6 +26,7 @@ const Navbar = () => {
             <NavLink to="/form/clientes" icon={<Users size={18} />} label="Clientes" />
             <NavLink to="/form/viagens" icon={<Plane size={18} />} label="Viagens" />
             <NavLink to="/form/passageiros" icon={<FileText size={18} />} label="Passageiros" />
+            <NavLink to="/form/gerenciar-passageiros" icon={<Settings size={18} />} label="Ger. Passageiros" />
 
             <NavLink to="/relatorios" icon={<PieChart size={18} />} label="Relatórios" />
             <NavLink to="/login" icon={<LogIn size={18} />} label="Login" />
