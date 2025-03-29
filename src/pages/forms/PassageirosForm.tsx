@@ -16,6 +16,7 @@ import PassageiroPersonalInfoSection from "@/components/passageiros/PassageiroPe
 import PassageiroPaymentSection from "@/components/passageiros/PassageiroPaymentSection";
 import DeletePassageiroButton from "@/components/passageiros/DeletePassageiroButton";
 import { Save } from "lucide-react";
+import { unmask } from "@/utils/masks";
 
 const PassageirosForm = () => {
   const {
@@ -39,6 +40,18 @@ const PassageirosForm = () => {
     fetchViagens();
   }, []);
 
+  // Prepara os dados antes de enviar para o servidor, garantindo que CPF e telefone estejam sem formatação
+  const handleSubmit = (data) => {
+    // Garantir que o CPF e telefone estão sem formatação
+    const formattedData = {
+      ...data,
+      cpfpassageiro: unmask(data.cpfpassageiro),
+      telefonepassageiro: data.telefonepassageiro ? unmask(data.telefonepassageiro) : ""
+    };
+    
+    onSubmit(formattedData);
+  };
+
   // Fixed function to handle deleting passenger from trip
   const handleDeleteFromViagem = async () => {
     const viagemId = form.getValues("idviagem");
@@ -59,7 +72,7 @@ const PassageirosForm = () => {
           </CardHeader>
           <CardContent className="pt-6">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                   <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="dados-pessoais">Dados Pessoais</TabsTrigger>

@@ -1,9 +1,10 @@
+
 // src\components\passageiros\PassageiroPersonalInfoSection.tsx
 import { Card, CardContent } from "@/components/ui/card";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { maskCPF, maskPhone } from "@/utils/masks";
+import { maskCPF, maskPhone, unmask } from "@/utils/masks";
 import { PassageiroFormValues } from "./types";
 import { UseFormReturn } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
@@ -43,7 +44,7 @@ const PassageiroPersonalInfoSection = ({
     
     try {
       // Clean the CPF before querying
-      const cleanCPF = cpf.replace(/\D/g, '');
+      const cleanCPF = unmask(cpf);
       
       // Query the clientes table
       const { data, error } = await supabase
@@ -100,10 +101,17 @@ const PassageiroPersonalInfoSection = ({
   
   // Handle CPF change with debounce
   const handleCPFChangeWithCheck = async (cpf: string) => {
-    handleCPFChange(cpf);
+    // Atualiza o campo mascarado para exibição
+    const maskedCPF = maskCPF(cpf);
     
-    // Clean the CPF
-    const cleanCPF = cpf.replace(/\D/g, '');
+    // Armazena o CPF sem formatação no formulário
+    const cleanCPF = unmask(cpf);
+    
+    // Define o valor formatado para exibição, mas internamente guardamos o valor limpo
+    form.setValue('cpfpassageiro', cleanCPF);
+    
+    // Notifica o componente pai sobre a mudança do CPF
+    handleCPFChange(cleanCPF);
     
     // Only check if we have a complete CPF
     if (cleanCPF.length === 11) {
@@ -112,6 +120,20 @@ const PassageiroPersonalInfoSection = ({
         autoFillClientData(clientData);
       }
     }
+  };
+  
+  // Handle telefone change to clean before storing
+  const handleTelefoneChange = (telefone: string) => {
+    // Atualiza o campo mascarado para exibição
+    const maskedTelefone = maskPhone(telefone);
+    
+    // Armazena o telefone sem formatação no formulário
+    const cleanTelefone = unmask(telefone);
+    
+    // Define o valor formatado para exibição, mas internamente guardamos o valor limpo
+    form.setValue('telefonepassageiro', cleanTelefone);
+    
+    return maskedTelefone;
   };
   
   return (
@@ -215,7 +237,6 @@ const PassageiroPersonalInfoSection = ({
                     placeholder="000.000.000-00"
                     value={maskCPF(field.value)}
                     onChange={(e) => {
-                      field.onChange(e.target.value);
                       handleCPFChangeWithCheck(e.target.value);
                     }}
                     className={`font-roboto ${isCheckingCPF ? 'opacity-70' : ''}`}
@@ -257,7 +278,10 @@ const PassageiroPersonalInfoSection = ({
                   <Input
                     placeholder="(00) 00000-0000"
                     value={maskPhone(field.value || '')}
-                    onChange={(e) => field.onChange(e.target.value)}
+                    onChange={(e) => {
+                      // Salva o valor sem máscara no formulário, mas exibe com máscara
+                      field.onChange(unmask(e.target.value));
+                    }}
                     className="font-roboto"
                     required={false}
                   />

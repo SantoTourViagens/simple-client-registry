@@ -1,3 +1,4 @@
+
 // src\hooks\passageiros\usePassageiroForm.tsx
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -94,12 +95,16 @@ export const usePassageiroForm = () => {
         return dateStr && dateStr.trim() !== "" ? dateStr : null;
       };
       
+      // Garante que CPF e telefone não têm formatação
+      const cleanCPF = unmask(data.cpfpassageiro);
+      const cleanTelefone = data.telefonepassageiro ? unmask(data.telefonepassageiro) : null;
+      
       // Create the data object that matches the Supabase table structure
       const passageiroData = {
         // We need to match the exact column names from the database
-        cpfpassageiro: data.cpfpassageiro,
+        cpfpassageiro: cleanCPF,
         nomepassageiro: data.nomepassageiro,
-        telefonepassageiro: data.telefonepassageiro,
+        telefonepassageiro: cleanTelefone,
         bairropassageiro: data.bairropassageiro,
         cidadepassageiro: data.cidadepassageiro,
         localembarquepassageiro: data.localembarquepassageiro,
@@ -143,9 +148,9 @@ export const usePassageiroForm = () => {
       let error;
       
       console.log('ID da viagem antes da inserção:', data.idviagem);
-            console.log('Dados completos:', passageiroData);
+      console.log('Dados completos:', passageiroData);
       
-            if (passageiroId) {
+      if (passageiroId) {
         const { error: updateError } = await supabase
           .from('passageiros')
           .update(passageiroData)
@@ -283,10 +288,13 @@ export const usePassageiroForm = () => {
       return;
     }
     
+    // Certifica-se de que o CPF está sem formatação ao buscar os dados
+    const cleanCPF = unmask(cpf);
+    
     const viagemId = form.getValues("idviagem");
     const currentViagemName = listaViagens.find(v => v.value === viagemId)?.label;
     
-    const passageiroData = await fetchPassageiroData(cpf, viagemId, currentViagemName);
+    const passageiroData = await fetchPassageiroData(cleanCPF, viagemId, currentViagemName);
     
     if (passageiroData) {
       // If we found a passenger for this trip, load their data
@@ -437,7 +445,7 @@ export const usePassageiroForm = () => {
     handleCPFChange,
     handlePagamentoAVistaChange,
     handleDeletePassageiro,
-    handleDeletePassageiroFromViagem, // Adicionando a nova função ao retorno
+    handleDeletePassageiroFromViagem,
     onSubmit,
     fetchViagens
   };
