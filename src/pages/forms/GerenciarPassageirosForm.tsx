@@ -18,21 +18,21 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Trash2 } from "lucide-react";
 
+// Atualizar a interface Viagem
 interface Viagem {
   id: number;
   destino: string;
-  datainicio: string;
-  datafim: string;
+  datapartida: string;  // Alterado de datainicio
+  dataretorno: string;  // Alterado de datafim
 }
 
 interface Passageiro {
   id: number;
-  nome: string;
-  cpf: string;
-  telefone: string;
-  numeropoltrona: number | null;
+  nomepassageiro: string;
+  cpfpassageiro: string;
+  telefonepassageiro: string;
+  poltrona: number | null;  // Changed from numeropoltrona
   idviagem: number;
-  passageiro_id: number;
 }
 
 const GerenciarPassageirosForm = () => {
@@ -57,21 +57,23 @@ const GerenciarPassageirosForm = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from("viagens")
-        .select("id, destino, datainicio, datafim")
-        .order("datainicio", { ascending: false });
-
+        .select("id, destino, datapartida, dataretorno")  // Alterado os nomes dos campos
+        .order("datapartida", { ascending: false });      // Alterado de datainicio para datapartida
+    
       if (error) {
+        console.error("Erro detalhado:", error);
         throw error;
       }
-
+  
+      console.log("Viagens carregadas:", data);
       setViagens(data || []);
       setLoading(false);
     } catch (error) {
-      console.error("Erro ao carregar viagens:", error);
+      console.error("Erro completo ao carregar viagens:", error);
       toast({
         variant: "destructive",
         title: "Erro ao carregar viagens",
-        description: "Não foi possível carregar a lista de viagens. Tente novamente mais tarde.",
+        description: error.message || "Não foi possível carregar a lista de viagens. Tente novamente mais tarde.",
       });
       setLoading(false);
     }
@@ -90,7 +92,7 @@ const GerenciarPassageirosForm = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from("passageiros")
-        .select("id, nome, cpf, telefone, numeropoltrona, idviagem, passageiro_id")
+        .select("id, nomepassageiro, cpfpassageiro, telefonepassageiro, poltrona, idviagem")
         .eq("idviagem", value);
 
       if (error) {
@@ -133,7 +135,7 @@ const GerenciarPassageirosForm = () => {
       setLoading(true);
       const { error } = await supabase
         .from("passageiros")
-        .update({ numeropoltrona: numeroPoltrona })
+        .update({ poltrona: numeroPoltrona })
         .eq("id", passageiroId);
 
       if (error) {
@@ -229,8 +231,9 @@ const GerenciarPassageirosForm = () => {
                           </SelectTrigger>
                           <SelectContent>
                             {viagens.map((viagem) => (
+                              // Atualizar também onde os campos são usados na renderização
                               <SelectItem key={viagem.id} value={viagem.id.toString()}>
-                                {viagem.destino} ({new Date(viagem.datainicio).toLocaleDateString()} - {new Date(viagem.datafim).toLocaleDateString()})
+                                {viagem.destino} ({new Date(viagem.datapartida).toLocaleDateString()} - {new Date(viagem.dataretorno).toLocaleDateString()})
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -260,13 +263,16 @@ const GerenciarPassageirosForm = () => {
                         </TableHeader>
                         <TableBody>
                           {passageiros.map((passageiro) => (
+                            // Update the table rendering
                             <TableRow key={passageiro.id}>
-                              <TableCell>{passageiro.nome}</TableCell>
-                              <TableCell>{passageiro.cpf}</TableCell>
-                              <TableCell>{passageiro.telefone}</TableCell>
-                              <TableCell className="cursor-pointer text-blue-600 hover:underline"
-                                onClick={() => handleUpdatePoltrona(passageiro.id, passageiro.numeropoltrona)}>
-                                {passageiro.numeropoltrona || "Não atribuída"}
+                              <TableCell>{passageiro.nomepassageiro}</TableCell>
+                              <TableCell>{passageiro.cpfpassageiro}</TableCell>
+                              <TableCell>{passageiro.telefonepassageiro}</TableCell>
+                              <TableCell 
+                                className="cursor-pointer text-blue-600 hover:underline"
+                                onClick={() => handleUpdatePoltrona(passageiro.id, passageiro.poltrona)}
+                              >
+                                {passageiro.poltrona || "Não atribuída"}
                               </TableCell>
                               <TableCell className="text-right">
                                 <Button 

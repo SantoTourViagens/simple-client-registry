@@ -85,9 +85,9 @@ const PassageirosForm = () => {
                   </TabsContent>
                 </Tabs>
                 
-                <div className="flex justify-between items-center mt-6">
+                <div className="flex justify-center items-center mt-6">
                   {isPassageiroLoaded ? (
-                    <div className="flex justify-between w-full space-x-2">
+                    <div className="flex gap-1">
                       <Button type="submit" className="flex items-center gap-2">
                         <Save className="h-4 w-4" />
                         Atualizar Passageiro

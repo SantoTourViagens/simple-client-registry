@@ -6,7 +6,14 @@ import type { Database } from './types';
 const SUPABASE_URL = "https://dsuasvsscejcskjnvirp.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzdWFzdnNzY2VqY3Nram52aXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI0MTI0NTcsImV4cCI6MjA1Nzk4ODQ1N30.ZzgiaXItvAYV5q5s2Ad6u12arFA4vC9ggbHaJkhxHmc";
 
-// Import the supabase client like this:
-// import { supabase } from "@/integrations/supabase/client";
-
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+// Test connection
+supabase.from('viagens').select('count').single()
+  .then(response => {
+    if (response.error) {
+      console.error('Supabase connection error:', response.error);
+    } else {
+      console.log('Supabase connection successful');
+    }
+  });
