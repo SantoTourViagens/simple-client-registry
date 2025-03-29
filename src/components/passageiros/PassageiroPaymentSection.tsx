@@ -8,6 +8,8 @@ import { Switch } from "@/components/ui/switch";
 import DateValuePairField from "./payment/DateValuePairField";
 import { UseFormReturn } from "react-hook-form";
 import { formatCurrency } from "@/utils/masks";
+import { useEffect } from "react";
+import { usePaymentCalculations } from "@/hooks/passageiros/usePaymentCalculations";
 
 interface PassageiroPaymentSectionProps {
   form: UseFormReturn<PassageiroFormValues>;
@@ -20,12 +22,58 @@ const PassageiroPaymentSection = ({
 }: PassageiroPaymentSectionProps) => {
   const pagamentoAVista = form.watch("pagamentoavista");
   const valorViagem = form.watch("valorviagem");
+  const valorSinal = form.watch("valorsinal") || 0;
+  const valorParcela2 = form.watch("valorparcela2") || 0;
+  const valorParcela3 = form.watch("valorparcela3") || 0;
+  const valorParcela4 = form.watch("valorparcela4") || 0;
+  const valorParcela5 = form.watch("valorparcela5") || 0;
+  const valorParcela6 = form.watch("valorparcela6") || 0;
+  const valorParcela7 = form.watch("valorparcela7") || 0;
+  const valorParcela8 = form.watch("valorparcela8") || 0;
+  const valorParcela9 = form.watch("valorparcela9") || 0;
+  const valorParcela10 = form.watch("valorparcela10") || 0;
+  const valorParcela11 = form.watch("valorparcela11") || 0;
+  const valorParcela12 = form.watch("valorparcela12") || 0;
+  
+  const { recalculateValorFaltaReceber } = usePaymentCalculations();
+  
+  // Update valorfaltareceber whenever any payment value changes
+  useEffect(() => {
+    if (pagamentoAVista) {
+      form.setValue("valorfaltareceber", 0);
+    } else {
+      const valorFaltaReceber = recalculateValorFaltaReceber(
+        valorViagem, valorSinal, valorParcela2, valorParcela3, valorParcela4,
+        valorParcela5, valorParcela6, valorParcela7, valorParcela8, valorParcela9,
+        valorParcela10, valorParcela11, valorParcela12
+      );
+      form.setValue("valorfaltareceber", valorFaltaReceber > 0 ? valorFaltaReceber : 0);
+    }
+  }, [
+    pagamentoAVista, valorViagem, valorSinal, valorParcela2, valorParcela3, valorParcela4,
+    valorParcela5, valorParcela6, valorParcela7, valorParcela8, valorParcela9,
+    valorParcela10, valorParcela11, valorParcela12, form
+  ]);
+
+  // Function to handle changes in any payment field
+  const handlePaymentValueChange = (fieldName: string, value: number) => {
+    form.setValue(fieldName as any, value);
+    
+    if (!pagamentoAVista) {
+      const valorFaltaReceber = recalculateValorFaltaReceber(
+        valorViagem, valorSinal, valorParcela2, valorParcela3, valorParcela4,
+        valorParcela5, valorParcela6, valorParcela7, valorParcela8, valorParcela9,
+        valorParcela10, valorParcela11, valorParcela12
+      );
+      form.setValue("valorfaltareceber", valorFaltaReceber > 0 ? valorFaltaReceber : 0);
+    }
+  };
 
   return (
     <Card className="form-section-card">
       <CardContent className="pt-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {/* Novo campo Valor da Viagem */}
+          {/* Valor da Viagem */}
           <FormField
             control={form.control}
             name="valorviagem"
@@ -39,7 +87,7 @@ const PassageiroPaymentSection = ({
             )}
           />
 
-          {/* Pagamento à Vista ajustado para 1/4 */}
+          {/* Pagamento à Vista */}
           <FormField
             control={form.control}
             name="pagamentoavista"
@@ -118,15 +166,13 @@ const PassageiroPaymentSection = ({
                 valueFieldName="valorsinal"
                 dateLabel="Data do Sinal"
                 valueLabel="Valor do Sinal R$"
+                onValueChange={(value) => handlePaymentValueChange("valorsinal", value)}
               />
 
               <div className="space-y-2">
                 <FormLabel className="font-inter font-medium">Valor Falta Receber R$</FormLabel>
                 <div className="h-10 flex items-center px-3 rounded-md border bg-gray-100 font-bold total-field">
-                  {(form.watch("valorfaltareceber") || 0).toLocaleString('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                  })}
+                  {formatCurrency(form.watch("valorfaltareceber") || 0)}
                 </div>
               </div>
             </>
@@ -142,6 +188,7 @@ const PassageiroPaymentSection = ({
                 valueFieldName="valorparcela2"
                 dateLabel="Data Parcela 2"
                 valueLabel="Valor Parcela 2 R$"
+                onValueChange={(value) => handlePaymentValueChange("valorparcela2", value)}
               />
 
               <DateValuePairField
@@ -150,6 +197,7 @@ const PassageiroPaymentSection = ({
                 valueFieldName="valorparcela3"
                 dateLabel="Data Parcela 3"
                 valueLabel="Valor Parcela 3 R$"
+                onValueChange={(value) => handlePaymentValueChange("valorparcela3", value)}
               />
             </div>
 
@@ -160,6 +208,7 @@ const PassageiroPaymentSection = ({
                 valueFieldName="valorparcela4"
                 dateLabel="Data Parcela 4"
                 valueLabel="Valor Parcela 4 R$"
+                onValueChange={(value) => handlePaymentValueChange("valorparcela4", value)}
               />
 
               <DateValuePairField
@@ -168,6 +217,7 @@ const PassageiroPaymentSection = ({
                 valueFieldName="valorparcela5"
                 dateLabel="Data Parcela 5"
                 valueLabel="Valor Parcela 5 R$"
+                onValueChange={(value) => handlePaymentValueChange("valorparcela5", value)}
               />
             </div>
 
@@ -178,6 +228,7 @@ const PassageiroPaymentSection = ({
                 valueFieldName="valorparcela6"
                 dateLabel="Data Parcela 6"
                 valueLabel="Valor Parcela 6 R$"
+                onValueChange={(value) => handlePaymentValueChange("valorparcela6", value)}
               />
 
               <DateValuePairField
@@ -186,6 +237,7 @@ const PassageiroPaymentSection = ({
                 valueFieldName="valorparcela7"
                 dateLabel="Data Parcela 7"
                 valueLabel="Valor Parcela 7 R$"
+                onValueChange={(value) => handlePaymentValueChange("valorparcela7", value)}
               />
             </div>
 
@@ -196,6 +248,7 @@ const PassageiroPaymentSection = ({
                 valueFieldName="valorparcela8"
                 dateLabel="Data Parcela 8"
                 valueLabel="Valor Parcela 8 R$"
+                onValueChange={(value) => handlePaymentValueChange("valorparcela8", value)}
               />
 
               <DateValuePairField
@@ -204,6 +257,7 @@ const PassageiroPaymentSection = ({
                 valueFieldName="valorparcela9"
                 dateLabel="Data Parcela 9"
                 valueLabel="Valor Parcela 9 R$"
+                onValueChange={(value) => handlePaymentValueChange("valorparcela9", value)}
               />
             </div>
 
@@ -214,7 +268,31 @@ const PassageiroPaymentSection = ({
                 valueFieldName="valorparcela10"
                 dateLabel="Data Parcela 10"
                 valueLabel="Valor Parcela 10 R$"
+                onValueChange={(value) => handlePaymentValueChange("valorparcela10", value)}
               />
+<<<<<<< HEAD
+=======
+
+              <DateValuePairField
+                form={form}
+                dateFieldName="dataparcela11"
+                valueFieldName="valorparcela11"
+                dateLabel="Data Parcela 11"
+                valueLabel="Valor Parcela 11 R$"
+                onValueChange={(value) => handlePaymentValueChange("valorparcela11", value)}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+              <DateValuePairField
+                form={form}
+                dateFieldName="dataparcela12"
+                valueFieldName="valorparcela12"
+                dateLabel="Data Parcela 12"
+                valueLabel="Valor Parcela 12 R$"
+                onValueChange={(value) => handlePaymentValueChange("valorparcela12", value)}
+              />
+>>>>>>> 477ea754297742bdf3de8b88dc6867d273c75308
             </div>
           </>
         )}
