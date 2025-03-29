@@ -1,4 +1,3 @@
-
 // src\components\passageiros\PassageiroPersonalInfoSection.tsx
 import { Card, CardContent } from "@/components/ui/card";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
@@ -10,6 +9,7 @@ import { UseFormReturn } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { formatCurrency } from "@/utils/masks";
 
 // Update the interface to expect the correct type
 interface PassageiroPersonalInfoSectionProps {
@@ -242,6 +242,19 @@ const PassageiroPersonalInfoSection = ({
                   />
                 </FormControl>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="valorfaltareceber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="font-inter font-medium">Valor Falta Receber R$</FormLabel>
+                <div className="h-10 flex items-center px-3 rounded-md border bg-gray-100 font-bold total-field">
+                  {formatCurrency(field.value || 0)}
+                </div>
               </FormItem>
             )}
           />
