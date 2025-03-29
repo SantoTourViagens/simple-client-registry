@@ -205,6 +205,28 @@ const PassageiroPersonalInfoSection = ({
 
           <FormField
             control={form.control}
+            name="cpfpassageiro"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="font-inter font-medium">CPF</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="000.000.000-00"
+                    value={maskCPF(field.value)}
+                    onChange={(e) => {
+                      handleCPFChangeWithCheck(e.target.value);
+                    }}
+                    className={`font-roboto ${isCheckingCPF ? 'opacity-70' : ''}`}
+                    disabled={isCheckingCPF}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="valorviagem"
             render={({ field }) => (
               <FormItem>
@@ -226,28 +248,6 @@ const PassageiroPersonalInfoSection = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-          <FormField
-            control={form.control}
-            name="cpfpassageiro"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="font-inter font-medium">CPF</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="000.000.000-00"
-                    value={maskCPF(field.value)}
-                    onChange={(e) => {
-                      handleCPFChangeWithCheck(e.target.value);
-                    }}
-                    className={`font-roboto ${isCheckingCPF ? 'opacity-70' : ''}`}
-                    disabled={isCheckingCPF}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
           <FormField
             control={form.control}
             name="nomepassageiro"

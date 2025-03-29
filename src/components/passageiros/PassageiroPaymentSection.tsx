@@ -7,6 +7,7 @@ import { PassageiroFormValues } from "./types";
 import { Switch } from "@/components/ui/switch";
 import DateValuePairField from "./payment/DateValuePairField";
 import { UseFormReturn } from "react-hook-form";
+import { formatCurrency } from "@/utils/masks";
 
 interface PassageiroPaymentSectionProps {
   form: UseFormReturn<PassageiroFormValues>;
@@ -18,11 +19,27 @@ const PassageiroPaymentSection = ({
   handlePagamentoAVistaChange,
 }: PassageiroPaymentSectionProps) => {
   const pagamentoAVista = form.watch("pagamentoavista");
+  const valorViagem = form.watch("valorviagem");
 
   return (
     <Card className="form-section-card">
       <CardContent className="pt-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {/* Novo campo Valor da Viagem */}
+          <FormField
+            control={form.control}
+            name="valorviagem"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="font-inter font-medium">Valor da Viagem</FormLabel>
+                <div className="h-10 flex items-center px-3 rounded-md border bg-gray-50 font-bold total-field">
+                  {formatCurrency(field.value || 0)}
+                </div>
+              </FormItem>
+            )}
+          />
+
+          {/* Pagamento à Vista ajustado para 1/4 */}
           <FormField
             control={form.control}
             name="pagamentoavista"
