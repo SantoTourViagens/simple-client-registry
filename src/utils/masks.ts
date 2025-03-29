@@ -39,3 +39,18 @@ export const formatCurrency = (value: number): string => {
     currency: 'BRL',
   });
 };
+
+// Adding the missing parseCurrency function
+export const parseCurrency = (value: string): number => {
+  if (!value) return 0;
+  
+  // Remove currency symbol and any non-numeric characters except for decimal separator
+  const sanitized = value.replace(/[^\d,.]/g, '')
+                        .replace(/\./g, '')  // Remove thousand separators
+                        .replace(',', '.');  // Replace comma with dot for decimal
+  
+  // Parse to float or return 0 if invalid
+  const parsed = parseFloat(sanitized);
+  return isNaN(parsed) ? 0 : parsed;
+};
+
