@@ -96,11 +96,6 @@ const PassageirosForm = () => {
                         onDelete={handleDeletePassageiro}
                         isVisible={true}
                       />
-                      <DeletePassageiroButton
-                        onDelete={handleDeleteFromViagem}
-                        isVisible={true}
-                        buttonText="Excluir Passageiro da Viagem"
-                      />
                     </div>
                   ) : (
                     <Button type="submit" className="w-full">

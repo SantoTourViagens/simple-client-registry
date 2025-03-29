@@ -39,6 +39,7 @@ const PassageirosForm = () => {
     fetchViagens();
   }, []);
 
+  // Fixed function to handle deleting passenger from trip
   const handleDeleteFromViagem = async () => {
     const viagemId = form.getValues("idviagem");
     if (viagemId) {
