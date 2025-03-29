@@ -32,9 +32,9 @@ const PassageiroPersonalInfoSection = ({
   const { toast } = useToast();
   const [isCheckingCPF, setIsCheckingCPF] = useState(false);
   
-  // Remove console.log or keep it for debugging
-  console.log("Vehicle Type:", vehicleType); // Add this to debug
-  console.log("Available seats:", availableSeats);
+  // Remover estes console.logs
+  // console.log("Vehicle Type:", vehicleType);
+  // console.log("Available seats:", availableSeats);
   
   // Function to check if CPF exists in the clientes table
   const checkCPFExists = async (cpf: string) => {
@@ -227,6 +227,24 @@ const PassageiroPersonalInfoSection = ({
 
           <FormField
             control={form.control}
+             name="nomepassageiro"
+            render={({ field }) => (
+              <FormItem className="md:col-span-2">
+                <FormLabel className="font-inter font-medium">Nome Completo</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Nome completo"
+                    {...field}
+                    className="font-roboto"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="valorviagem"
             render={({ field }) => (
               <FormItem>
@@ -260,26 +278,7 @@ const PassageiroPersonalInfoSection = ({
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-          <FormField
-            control={form.control}
-            name="nomepassageiro"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="font-inter font-medium">Nome</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Nome completo"
-                    {...field}
-                    className="font-roboto"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
+        {/* Removendo a div que contém o campo duplicado de nome */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
           <FormField
             control={form.control}

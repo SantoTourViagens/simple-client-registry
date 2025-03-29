@@ -11,13 +11,11 @@ export const usePaymentCalculations = () => {
     valorParcela7: number = 0,
     valorParcela8: number = 0,
     valorParcela9: number = 0,
-    valorParcela10: number = 0,
-    valorParcela11: number = 0,
-    valorParcela12: number = 0
+    valorParcela10: number = 0
   ): number => {
     return valorViagem - valorSinal - valorParcela2 - valorParcela3 - 
            valorParcela4 - valorParcela5 - valorParcela6 - valorParcela7 - 
-           valorParcela8 - valorParcela9 - valorParcela10 - valorParcela11 - valorParcela12;
+           valorParcela8 - valorParcela9 - valorParcela10;
   };
 
   return {

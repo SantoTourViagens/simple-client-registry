@@ -19,15 +19,15 @@ const PaymentTypeSelector = ({ form, onCheckboxChange }: PaymentTypeSelectorProp
           <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
             <FormControl>
               <Checkbox
-                checked={field.value}
+                checked={!field.value}
                 onCheckedChange={(checked) => {
-                  field.onChange(checked);
-                  onCheckboxChange(checked as boolean);
+                  field.onChange(!checked);
+                  onCheckboxChange(!checked as boolean);
                 }}
               />
             </FormControl>
             <div className="space-y-1 leading-none">
-              <FormLabel>Pagamento à Vista</FormLabel>
+              <FormLabel>Pagamento Parcelado</FormLabel>
             </div>
           </FormItem>
         )}

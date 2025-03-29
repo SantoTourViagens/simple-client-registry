@@ -38,6 +38,7 @@ export const usePassageiroForm = () => {
   
   const { recalculateValorFaltaReceber } = usePaymentCalculations();
 
+  // No defaultValues do form:
   const form = useForm<PassageiroFormValues>({
     resolver: zodResolver(passageiroSchema),
     defaultValues: {

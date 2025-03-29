@@ -38,10 +38,6 @@ export const passageiroSchema = z.object({
   valorparcela9: z.number().min(0).optional(),
   dataparcela10: z.string().optional().nullable(),
   valorparcela10: z.number().min(0).optional(),
-  dataparcela11: z.string().optional().nullable(),
-  valorparcela11: z.number().min(0).optional(),
-  dataparcela12: z.string().optional().nullable(),
-  valorparcela12: z.number().min(0).optional(),
   poltrona: z.string().optional(),
   tipoveiculo: z.string().optional(),
 }).refine((formData) => {

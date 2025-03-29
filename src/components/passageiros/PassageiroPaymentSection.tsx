@@ -16,10 +16,7 @@ interface PassageiroPaymentSectionProps {
   handlePagamentoAVistaChange: (value: boolean) => void;
 }
 
-const PassageiroPaymentSection = ({
-  form,
-  handlePagamentoAVistaChange,
-}: PassageiroPaymentSectionProps) => {
+const PassageiroPaymentSection = ({ form, handlePagamentoAVistaChange }: PassageiroPaymentSectionProps) => {
   const pagamentoAVista = form.watch("pagamentoavista");
   const valorViagem = form.watch("valorviagem");
   const valorSinal = form.watch("valorsinal") || 0;
@@ -32,9 +29,8 @@ const PassageiroPaymentSection = ({
   const valorParcela8 = form.watch("valorparcela8") || 0;
   const valorParcela9 = form.watch("valorparcela9") || 0;
   const valorParcela10 = form.watch("valorparcela10") || 0;
-  const valorParcela11 = form.watch("valorparcela11") || 0;
-  const valorParcela12 = form.watch("valorparcela12") || 0;
-  
+  // Removidas as parcelas 11 e 12
+
   const { recalculateValorFaltaReceber } = usePaymentCalculations();
   
   // Update valorfaltareceber whenever any payment value changes
@@ -45,17 +41,16 @@ const PassageiroPaymentSection = ({
       const valorFaltaReceber = recalculateValorFaltaReceber(
         valorViagem, valorSinal, valorParcela2, valorParcela3, valorParcela4,
         valorParcela5, valorParcela6, valorParcela7, valorParcela8, valorParcela9,
-        valorParcela10, valorParcela11, valorParcela12
+        valorParcela10
       );
       form.setValue("valorfaltareceber", valorFaltaReceber > 0 ? valorFaltaReceber : 0);
     }
   }, [
     pagamentoAVista, valorViagem, valorSinal, valorParcela2, valorParcela3, valorParcela4,
     valorParcela5, valorParcela6, valorParcela7, valorParcela8, valorParcela9,
-    valorParcela10, valorParcela11, valorParcela12, form
+    valorParcela10, form
   ]);
 
-  // Function to handle changes in any payment field
   const handlePaymentValueChange = (fieldName: string, value: number) => {
     form.setValue(fieldName as any, value);
     
@@ -63,7 +58,7 @@ const PassageiroPaymentSection = ({
       const valorFaltaReceber = recalculateValorFaltaReceber(
         valorViagem, valorSinal, valorParcela2, valorParcela3, valorParcela4,
         valorParcela5, valorParcela6, valorParcela7, valorParcela8, valorParcela9,
-        valorParcela10, valorParcela11, valorParcela12
+        valorParcela10
       );
       form.setValue("valorfaltareceber", valorFaltaReceber > 0 ? valorFaltaReceber : 0);
     }
@@ -270,29 +265,6 @@ const PassageiroPaymentSection = ({
                 valueLabel="Valor Parcela 10 R$"
                 onValueChange={(value) => handlePaymentValueChange("valorparcela10", value)}
               />
-<<<<<<< HEAD
-=======
-
-              <DateValuePairField
-                form={form}
-                dateFieldName="dataparcela11"
-                valueFieldName="valorparcela11"
-                dateLabel="Data Parcela 11"
-                valueLabel="Valor Parcela 11 R$"
-                onValueChange={(value) => handlePaymentValueChange("valorparcela11", value)}
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-              <DateValuePairField
-                form={form}
-                dateFieldName="dataparcela12"
-                valueFieldName="valorparcela12"
-                dateLabel="Data Parcela 12"
-                valueLabel="Valor Parcela 12 R$"
-                onValueChange={(value) => handlePaymentValueChange("valorparcela12", value)}
-              />
->>>>>>> 477ea754297742bdf3de8b88dc6867d273c75308
             </div>
           </>
         )}
