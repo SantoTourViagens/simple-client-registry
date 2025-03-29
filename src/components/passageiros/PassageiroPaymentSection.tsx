@@ -215,24 +215,6 @@ const PassageiroPaymentSection = ({
                 dateLabel="Data Parcela 10"
                 valueLabel="Valor Parcela 10 R$"
               />
-
-              <DateValuePairField
-                form={form}
-                dateFieldName="dataparcela11"
-                valueFieldName="valorparcela11"
-                dateLabel="Data Parcela 11"
-                valueLabel="Valor Parcela 11 R$"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-              <DateValuePairField
-                form={form}
-                dateFieldName="dataparcela12"
-                valueFieldName="valorparcela12"
-                dateLabel="Data Parcela 12"
-                valueLabel="Valor Parcela 12 R$"
-              />
             </div>
           </>
         )}
