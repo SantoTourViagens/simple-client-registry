@@ -146,7 +146,7 @@ const FormInput = ({
               className
             )}
             placeholder={label}
-            onChange={handleCPFChange}
+            onChange={handleCPFChange} // This is now a string => void function
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             value={props.value as string || ""}
@@ -164,7 +164,7 @@ const FormInput = ({
               className
             )}
             placeholder={label}
-            onChange={handlePhoneChange}
+            onChange={handlePhoneChange} // This is now a string => void function
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             value={props.value as string || ""}
