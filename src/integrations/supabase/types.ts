@@ -339,6 +339,45 @@ export type Database = {
           },
         ]
       }
+      passageiros_viagens: {
+        Row: {
+          created_at: string | null
+          id: string
+          passageiro_id: string
+          updated_at: string | null
+          viagem_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          passageiro_id: string
+          updated_at?: string | null
+          viagem_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          passageiro_id?: string
+          updated_at?: string | null
+          viagem_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "passageiros_viagens_passageiro_id_fkey"
+            columns: ["passageiro_id"]
+            isOneToOne: false
+            referencedRelation: "passageiros"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "passageiros_viagens_viagem_id_fkey"
+            columns: ["viagem_id"]
+            isOneToOne: false
+            referencedRelation: "viagens"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pedidosdeacesso: {
         Row: {
           created_at: string | null

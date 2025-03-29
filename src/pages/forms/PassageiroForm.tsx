@@ -32,12 +32,20 @@ const PassageirosForm = () => {
     handleDeletePassageiro,
     onSubmit,
     fetchViagens,
-    handleDeletePassageiroFromViagem // Add this handler
+    handleDeletePassageiroFromViagem
   } = usePassageiroForm();
 
   useEffect(() => {
     fetchViagens();
   }, []);
+
+  // Fixed function to handle deleting passenger from trip
+  const handleDeleteFromViagem = async () => {
+    const viagemId = form.getValues("idviagem");
+    if (viagemId) {
+      await handleDeletePassageiroFromViagem(viagemId);
+    }
+  };
 
   return (
     <Layout>
@@ -88,12 +96,11 @@ const PassageirosForm = () => {
                         onDelete={handleDeletePassageiro}
                         isVisible={true}
                       />
-                      <Button
-                        onClick={handleDeletePassageiroFromViagem} // Add this button
-                        className="flex items-center gap-2"
-                      >
-                        Excluir Passageiro da Viagem
-                      </Button>
+                      <DeletePassageiroButton
+                        onDelete={handleDeleteFromViagem}
+                        isVisible={true}
+                        buttonText="Excluir Passageiro da Viagem"
+                      />
                     </div>
                   ) : (
                     <Button type="submit" className="w-full">
