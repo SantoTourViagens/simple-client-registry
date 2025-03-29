@@ -12,13 +12,12 @@ import {
 } from "@/components/ui/card";
 import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Trash2 } from "lucide-react";
 
-// Atualizar a interface Viagem
+// Atualizar a interface Viagem com os nomes corretos dos campos
 interface Viagem {
   id: number;
   destino: string;
@@ -28,10 +27,10 @@ interface Viagem {
 
 interface Passageiro {
   id: number;
-  nomepassageiro: string;
-  cpfpassageiro: string;
-  telefonepassageiro: string;
-  poltrona: number | null;  // Changed from numeropoltrona
+  nomepassageiro: string;  // Alterado de nome
+  cpfpassageiro: string;   // Alterado de cpf
+  telefonepassageiro: string; // Alterado de telefone
+  poltrona: string | null;  // Alterado de numeropoltrona e mudado para string
   idviagem: number;
 }
 
@@ -113,29 +112,21 @@ const GerenciarPassageirosForm = () => {
   };
 
   // Atualizar número de poltrona do passageiro
-  const handleUpdatePoltrona = async (passageiroId: number, numeroPoltronaAtual: number | null) => {
-    const novoNumero = prompt("Digite o novo número da poltrona:", numeroPoltronaAtual?.toString() || "");
+  const handleUpdatePoltrona = async (passageiroId: number, poltronaAtual: string | null) => {
+    const novoNumero = prompt("Digite o novo número da poltrona:", poltronaAtual || "");
     
     if (novoNumero === null) {
       return; // Usuário cancelou a operação
     }
 
-    const numeroPoltrona = novoNumero === "" ? null : parseInt(novoNumero);
-
-    if (novoNumero !== "" && isNaN(numeroPoltrona as number)) {
-      toast({
-        variant: "destructive",
-        title: "Número inválido",
-        description: "Por favor, digite um número válido para a poltrona.",
-      });
-      return;
-    }
+    // A poltrona é um campo do tipo string, então não é necessário converter para número
+    const poltrona = novoNumero === "" ? null : novoNumero;
 
     try {
       setLoading(true);
       const { error } = await supabase
         .from("passageiros")
-        .update({ poltrona: numeroPoltrona })
+        .update({ poltrona: poltrona })
         .eq("id", passageiroId);
 
       if (error) {
@@ -144,7 +135,7 @@ const GerenciarPassageirosForm = () => {
 
       // Atualizar o estado local após atualização bem-sucedida
       setPassageiros(passageiros.map(p => 
-        p.id === passageiroId ? { ...p, numeropoltrona: numeroPoltrona } : p
+        p.id === passageiroId ? { ...p, poltrona: poltrona } : p
       ));
 
       toast({
