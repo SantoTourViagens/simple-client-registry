@@ -16,6 +16,7 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Trash2 } from "lucide-react";
+import { unmask } from "@/utils/masks";
 
 // Atualizar a interface Viagem com os nomes corretos dos campos
 interface Viagem {

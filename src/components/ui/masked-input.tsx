@@ -2,15 +2,17 @@
 import React, { useState, useEffect, forwardRef } from "react";
 import { cn } from "@/lib/utils";
 import { Input } from "./input";
+import { unmask } from "@/utils/masks";
 
 export interface MaskedInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   mask: string;
   onChange?: (value: string) => void;
   className?: string;
+  saveUnmasked?: boolean; // Nova propriedade para salvar sem máscara
 }
 
 const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>(
-  ({ mask, onChange, value, className, ...props }, ref) => {
+  ({ mask, onChange, value, className, saveUnmasked = false, ...props }, ref) => {
     const [inputValue, setInputValue] = useState<string>('');
 
     useEffect(() => {
@@ -76,7 +78,8 @@ const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>(
         setInputValue(formattedValue);
         
         if (onChange) {
-          onChange(formattedValue);
+          // Se saveUnmasked for true, passamos apenas os números
+          onChange(saveUnmasked ? unmask(formattedValue) : formattedValue);
         }
         
         // We need to set the cursor position in the next tick after React updates the DOM
@@ -95,7 +98,8 @@ const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>(
       setInputValue(newValue);
       
       if (onChange) {
-        onChange(newValue);
+        // Se saveUnmasked for true, passamos apenas os números
+        onChange(saveUnmasked ? unmask(newValue) : newValue);
       }
       
       // Set cursor position after all mask characters
@@ -117,13 +121,13 @@ const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>(
       if (e.key === 'Enter') {
         e.preventDefault();
         // Find the next focusable element
-        const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+        const focusableElements = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])';
         const form = e.currentTarget.form;
         if (form) {
           const formElements = Array.from(form.querySelectorAll(focusableElements)) as HTMLElement[];
           const currentIndex = formElements.indexOf(e.currentTarget);
-          const nextElement = formElements[currentIndex + 1];
-          if (nextElement) {
+          if (currentIndex > -1 && currentIndex < formElements.length - 1) {
+            const nextElement = formElements[currentIndex + 1];
             nextElement.focus();
           }
         }

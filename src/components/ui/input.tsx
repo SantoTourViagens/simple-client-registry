@@ -1,14 +1,16 @@
 
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { formatCurrency, parseCurrency } from "@/utils/masks"
+import { formatCurrency, parseCurrency, unmask } from "@/utils/masks"
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   isCurrency?: boolean;
+  isCPF?: boolean;
+  isPhone?: boolean;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, isCurrency, onKeyDown, onChange, ...props }, ref) => {
+  ({ className, type, isCurrency, isCPF, isPhone, onKeyDown, onChange, ...props }, ref) => {
     // State to track the raw numeric value for currency inputs
     const [rawValue, setRawValue] = React.useState<number | undefined>(
       isCurrency && props.value !== undefined && props.value !== null ? 
@@ -89,8 +91,34 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             onChange(newEvent);
           }
         }
+      } else if (isCPF) {
+        // Para CPF, limpa o valor mas exibe formatado
+        if (onChange) {
+          const newEvent = {
+            ...e,
+            target: {
+              ...e.target,
+              value: unmask(e.target.value) // Salva somente números
+            }
+          } as React.ChangeEvent<HTMLInputElement>;
+          
+          onChange(newEvent);
+        }
+      } else if (isPhone) {
+        // Para telefone, limpa o valor mas exibe formatado
+        if (onChange) {
+          const newEvent = {
+            ...e,
+            target: {
+              ...e.target,
+              value: unmask(e.target.value) // Salva somente números
+            }
+          } as React.ChangeEvent<HTMLInputElement>;
+          
+          onChange(newEvent);
+        }
       } else if (onChange) {
-        // For non-currency inputs, just pass through
+        // For non-special inputs, just pass through
         onChange(e);
       }
     };
