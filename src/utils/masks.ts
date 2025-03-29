@@ -54,3 +54,25 @@ export const parseCurrency = (value: string): number => {
   return isNaN(parsed) ? 0 : parsed;
 };
 
+// Adding the missing maskDate function
+export const maskDate = (date: string): string => {
+  if (!date) return '';
+  
+  // If the date is already in DD/MM/YYYY format, return it
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(date)) {
+    return date;
+  }
+  
+  // If it's in ISO format (YYYY-MM-DD), convert to DD/MM/YYYY
+  if (/^\d{4}-\d{2}-\d{2}/.test(date)) {
+    const parts = date.split('T')[0].split('-');
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+  }
+  
+  // For numeric input (raw digits), format as DD/MM/YYYY
+  const unmasked = unmask(date);
+  return unmasked
+    .replace(/(\d{2})(\d)/, '$1/$2')
+    .replace(/(\d{2})(\d)/, '$1/$2')
+    .slice(0, 10);
+};

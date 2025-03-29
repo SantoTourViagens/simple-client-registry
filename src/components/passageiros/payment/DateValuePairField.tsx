@@ -31,7 +31,12 @@ const DateValuePairField = ({
           <FormItem>
             <FormLabel className="font-inter font-medium">{dateLabel}</FormLabel>
             <FormControl>
-              <Input type="date" {...field} className="font-roboto" />
+              <Input 
+                type="date" 
+                {...field} 
+                className="font-roboto"
+                value={field.value as string || ''} // Cast to string and provide fallback
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -45,7 +50,7 @@ const DateValuePairField = ({
             <FormLabel className="font-inter font-medium">{valueLabel}</FormLabel>
             <FormControl>
               <NumericInput
-                value={field.value || 0}
+                value={typeof field.value === 'number' ? field.value : 0} // Ensure value is a number
                 onChange={(value) => {
                   field.onChange(value);
                   if (onValueChange) {
