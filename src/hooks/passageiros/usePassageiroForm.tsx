@@ -263,16 +263,18 @@ export const usePassageiroForm = () => {
       if (viagemData.precosugerido !== null && viagemData.precosugerido !== undefined) {
         const precoNum = Number(viagemData.precosugerido);
         form.setValue("valorviagem", precoNum);
+        
+        // Initialize valor falta receber when a trip is selected
+        if (form.getValues("pagamentoavista")) {
+          form.setValue("valorfaltareceber", 0);
+        } else {
+          form.setValue("valorfaltareceber", precoNum);
+        }
       }
       
       if (viagemData.tipoveiculo) {
         setVehicleType(viagemData.tipoveiculo);
         form.setValue("tipoveiculo", viagemData.tipoveiculo);
-      }
-      
-      if (!form.getValues("pagamentoavista")) {
-        const valorViagem = form.getValues("valorviagem");
-        form.setValue("valorfaltareceber", valorViagem);
       }
       
       // Fetch taken seats
@@ -339,10 +341,12 @@ export const usePassageiroForm = () => {
     form.setValue("pagamentoavista", value);
     
     if (value) {
+      // If payment is set to "à vista", set valorfaltareceber to 0
       form.setValue("valorfaltareceber", 0);
       const today = new Date().toISOString().split('T')[0];
       form.setValue("datapagamentoavista", today);
     } else {
+      // If payment is set to installments, recalculate valorfaltareceber
       const valorViagem = form.getValues("valorviagem");
       const valorSinal = form.getValues("valorsinal") || 0;
       const valorParcela2 = form.getValues("valorparcela2") || 0;
@@ -363,7 +367,7 @@ export const usePassageiroForm = () => {
         valorParcela10, valorParcela11, valorParcela12
       );
       
-      form.setValue("valorfaltareceber", valorfaltareceber);
+      form.setValue("valorfaltareceber", valorfaltareceber > 0 ? valorfaltareceber : 0);
     }
   };
   

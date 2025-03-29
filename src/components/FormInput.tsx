@@ -37,7 +37,9 @@ const FormInput = ({
               placeholder={placeholder}
               onChange={(e) => {
                 field.onChange(e);
-                onChange?.(e);
+                if (onChange) {
+                  onChange(e);
+                }
               }}
               disabled={disabled}
             />
