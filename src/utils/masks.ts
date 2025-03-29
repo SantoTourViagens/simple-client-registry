@@ -34,42 +34,39 @@ export const maskPhone = (phone: string): string => {
 };
 
 export const formatCurrency = (value: number): string => {
-  return value.toLocaleString('pt-BR', {
+  const valorFixo = Number(value.toFixed(2));
+  
+  return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
-  });
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(valorFixo);
 };
 
-// Adding the missing parseCurrency function
 export const parseCurrency = (value: string): number => {
   if (!value) return 0;
   
-  // Remove currency symbol and any non-numeric characters except for decimal separator
-  const sanitized = value.replace(/[^\d,.]/g, '')
-                        .replace(/\./g, '')  // Remove thousand separators
-                        .replace(',', '.');  // Replace comma with dot for decimal
+  const numeroLimpo = value.replace(/[^\d,]/g, '')
+                          .replace(/\./g, '')
+                          .replace(',', '.');
   
-  // Parse to float or return 0 if invalid
-  const parsed = parseFloat(sanitized);
-  return isNaN(parsed) ? 0 : parsed;
+  const numero = parseFloat(numeroLimpo);
+  return isNaN(numero) ? 0 : numero;
 };
 
-// Adding the missing maskDate function
 export const maskDate = (date: string): string => {
   if (!date) return '';
   
-  // If the date is already in DD/MM/YYYY format, return it
   if (/^\d{2}\/\d{2}\/\d{4}$/.test(date)) {
     return date;
   }
   
-  // If it's in ISO format (YYYY-MM-DD), convert to DD/MM/YYYY
   if (/^\d{4}-\d{2}-\d{2}/.test(date)) {
     const parts = date.split('T')[0].split('-');
     return `${parts[2]}/${parts[1]}/${parts[0]}`;
   }
   
-  // For numeric input (raw digits), format as DD/MM/YYYY
   const unmasked = unmask(date);
   return unmasked
     .replace(/(\d{2})(\d)/, '$1/$2')

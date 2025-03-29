@@ -1,13 +1,17 @@
 
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import path from "path";
-import { componentTagger } from "lovable-tagger";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import path from 'path';
 
 export default defineConfig(({ mode }) => ({
+  plugins: [
+    react({
+      tsDecorators: true
+    })
+  ],
   server: {
     host: "localhost",
-    port: process.env.PORT ? parseInt(process.env.PORT) : 8080, // Parse port as number
+    port: process.env.PORT ? parseInt(process.env.PORT) : 8080,
     allowedHosts: [
       '72ea7269-d7f0-46f0-a6b2-6b04caf8d0ad.lovableproject.com',
       '1c77c54c-8e3d-42bd-acb2-dc81cad06f8b.lovableproject.com',
@@ -26,19 +30,14 @@ export default defineConfig(({ mode }) => ({
       timeout: 120000,
     },
   },
-  plugins: [
-    react({
-      tsDecorators: true
-    }),
-    mode === 'development' && componentTagger(),
-  ].filter(Boolean),
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      '@': path.resolve(__dirname, './src'),
     },
   },
   build: {
     minify: mode !== 'development',
+    sourcemap: true,
     rollupOptions: {
       output: {
         sourcemapExcludeSources: true,

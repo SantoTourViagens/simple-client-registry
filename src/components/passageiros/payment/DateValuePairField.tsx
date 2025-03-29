@@ -4,14 +4,15 @@ import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import { PassageiroFormValues } from "../types";
 import { NumericInput } from "@/components/ui/numeric-input";
+import { formatCurrency, unmask } from "@/utils/masks";
 
 interface DateValuePairFieldProps {
   form: UseFormReturn<PassageiroFormValues>;
-  dateFieldName: keyof PassageiroFormValues;
-  valueFieldName: keyof PassageiroFormValues;
+  dateFieldName: string;
+  valueFieldName: string;
   dateLabel: string;
   valueLabel: string;
-  onValueChange?: (value: number) => void;
+  onValueChange: (value: number) => void;
 }
 
 const DateValuePairField = ({
@@ -20,47 +21,47 @@ const DateValuePairField = ({
   valueFieldName,
   dateLabel,
   valueLabel,
-  onValueChange
+  onValueChange,
 }: DateValuePairFieldProps) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="space-y-4">
       <FormField
         control={form.control}
         name={dateFieldName}
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="font-inter font-medium">{dateLabel}</FormLabel>
+            <FormLabel>{dateLabel}</FormLabel>
             <FormControl>
-              <Input 
-                type="date" 
-                {...field} 
-                className="font-roboto"
-                value={field.value as string || ''} // Cast to string and provide fallback
+              <Input
+                type="date"
+                {...field}
+                value={field.value || ''}
               />
             </FormControl>
-            <FormMessage />
           </FormItem>
         )}
       />
+
       <FormField
         control={form.control}
         name={valueFieldName}
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="font-inter font-medium">{valueLabel}</FormLabel>
+            <FormLabel>{valueLabel}</FormLabel>
             <FormControl>
-              <NumericInput
-                value={typeof field.value === 'number' ? field.value : 0} // Ensure value is a number
-                onChange={(value) => {
+              <Input
+                {...field}
+                type="number"
+                min="0"
+                step="0.01"
+                value={field.value || 0}
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value) || 0;
                   field.onChange(value);
-                  if (onValueChange) {
-                    onValueChange(value);
-                  }
+                  onValueChange(value);
                 }}
-                className="font-roboto"
               />
             </FormControl>
-            <FormMessage />
           </FormItem>
         )}
       />
