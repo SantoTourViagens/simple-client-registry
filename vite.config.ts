@@ -7,7 +7,7 @@ import { componentTagger } from "lovable-tagger";
 export default defineConfig(({ mode }) => ({
   server: {
     host: "localhost",
-    port: process.env.PORT || 8080, // Permite definir a porta via variável de ambiente
+    port: process.env.PORT ? parseInt(process.env.PORT) : 8080, // Parse port as number
     allowedHosts: [
       '72ea7269-d7f0-46f0-a6b2-6b04caf8d0ad.lovableproject.com',
       '1c77c54c-8e3d-42bd-acb2-dc81cad06f8b.lovableproject.com',
