@@ -19,19 +19,19 @@ import { Trash2 } from "lucide-react";
 
 // Atualizar a interface Viagem com os nomes corretos dos campos
 interface Viagem {
-  id: number;
+  id: string;  // Alterado de number para string
   destino: string;
   datapartida: string;  // Alterado de datainicio
   dataretorno: string;  // Alterado de datafim
 }
 
 interface Passageiro {
-  id: number;
+  id: string;  // Alterado de number para string
   nomepassageiro: string;  // Alterado de nome
   cpfpassageiro: string;   // Alterado de cpf
   telefonepassageiro: string; // Alterado de telefone
   poltrona: string | null;  // Alterado de numeropoltrona e mudado para string
-  idviagem: number;
+  idviagem: string;  // Alterado de number para string
 }
 
 const GerenciarPassageirosForm = () => {
@@ -112,7 +112,7 @@ const GerenciarPassageirosForm = () => {
   };
 
   // Atualizar número de poltrona do passageiro
-  const handleUpdatePoltrona = async (passageiroId: number, poltronaAtual: string | null) => {
+  const handleUpdatePoltrona = async (passageiroId: string, poltronaAtual: string | null) => {
     const novoNumero = prompt("Digite o novo número da poltrona:", poltronaAtual || "");
     
     if (novoNumero === null) {
@@ -156,7 +156,7 @@ const GerenciarPassageirosForm = () => {
   };
 
   // Excluir passageiro da viagem
-  const handleDeletePassageiro = async (passageiroId: number) => {
+  const handleDeletePassageiro = async (passageiroId: string) => {
     if (!confirm("Tem certeza que deseja remover este passageiro da viagem?")) {
       return;
     }
